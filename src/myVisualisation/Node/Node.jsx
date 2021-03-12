@@ -4,11 +4,13 @@ export default class Node extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      status: calcState(this.props),
+      // status: calcState(this.props),
     };
   }
   render() {
-    return <div className={`node ${this.state.status}`}></div>;
+    const { row, col, id, isStart, isFinish } = this.props;
+    let status = isStart ? "Start" : isFinish ? "Finish" : "Unused";
+    return <div id={`node-${id}`} className={`node ${status}`}></div>;
   }
 }
 

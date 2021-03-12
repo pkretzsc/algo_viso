@@ -36,22 +36,35 @@ export default class PathfindingVisualizer extends Component {
     const startNode = grid[startRow][startCol];
     const finishNode = grid[finishRow][finishCol];
     const visitedNodesInOrder = dijkstras(grid, startNode, finishNode);
+    // console.log(visitedNodesInOrder);
     const nodesInShortestPath = getNodesInShortestPathOrder(finishNode);
+    // console.log(nodesInShortestPath);
     this.animateDijkstras(visitedNodesInOrder, nodesInShortestPath);
   }
   animateDijkstras(visitedNodesInOrder, nodesInShortestPath) {
+    console.log("start animation");
     for (let i = 0; i < visitedNodesInOrder.length; i++) {
-      if (i === visitedNodesInOrder.length) {
-        setTimeout(() => this.animateShortestPath(nodesInShortestPath), i * 10);
+      // console.log(i);
+      const curNode = visitedNodesInOrder[i];
+      setTimeout(() => {
+        // const { row, col } = nodesInShortestPath[i];
+        document.getElementById(`node-${curNode.id}`).className =
+          "node Visited";
+      }, 10 * i);
+      if (i === visitedNodesInOrder.length - 1) {
+        // console.log("start shortest pat h");
+        setTimeout(() => this.animateShortestPath(nodesInShortestPath), 10 * i);
       }
     }
   }
   animateShortestPath(nodesInShortestPath) {
     for (let i = 0; i < nodesInShortestPath.length; i++) {
+      const curNode = nodesInShortestPath[i];
       setTimeout(() => {
-        const { row, col } = nodesInShortestPath[i];
-        document.getElementById;
-      });
+        // const { row, col } = nodesInShortestPath[i];
+        document.getElementById(`node-${curNode.id}`).className =
+          "node Shortest";
+      }, 50 * i);
     }
   }
   render() {
@@ -59,7 +72,7 @@ export default class PathfindingVisualizer extends Component {
     return (
       <div>
         <header className="PVHeader">
-          <img src={logo} className="App-logo" alt="logo" />
+          <img src={logo} className="App-logo" alt="logo " />
           <button onClick={() => this.runDijkstras()}>
             Run Dijkstras Algorithm
           </button>
@@ -67,11 +80,14 @@ export default class PathfindingVisualizer extends Component {
             {grid.map((row, rowIdx) => {
               return (
                 <div key={`row${rowIdx}`}>
-                  {row.map((col, colIdx) => (
+                  {row.map((node, colIdx) => (
                     <Node
                       key={`r${rowIdx}c${colIdx}`}
-                      isStart={col.isStart}
-                      isFinish={col.isFinish}
+                      isStart={node.isStart}
+                      isFinish={node.isFinish}
+                      id={node.id}
+                      row={node.row}
+                      col={node.col}
                     />
                   ))}
                 </div>
@@ -96,7 +112,7 @@ class NodeCl {
     this.distance = Infinity;
     this.predecessor = null;
     this.isVisited = false;
-    this.id = nanoid();
+    this.id = nanoid(); //to directly identify nodes
   }
 }
 

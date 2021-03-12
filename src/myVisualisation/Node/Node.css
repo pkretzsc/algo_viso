@@ -2,16 +2,22 @@
   color: whitesmoke;
   width: 3vmin;
   height: 3vmin;
-  background-color: white;
-  /* border: solid #000;ks */
-  margin: 2px;
+  background-color: black;
+  border: solid #000 1px;
+  /* margin: 2px; */
 }
 .Start {
   background-color: chartreuse;
 }
 .Finish {
-  background-color: chocolate;
+  background-color: rgb(243, 121, 34);
 }
 .Unused {
-  background-color: white;
+  background-color: #dad7cd;
+}
+.Shortest {
+  background-color: #a3b18a;
+}
+.Visited {
+  background-color: #588157;
 }
