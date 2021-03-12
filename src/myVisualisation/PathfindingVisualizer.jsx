@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Node from "./Node/Node";
 import "./PathfindingVisualizer.css";
 import logo from "./../logo.svg";
-import { djikstras, getNodesInShortestPathOrder } from "./algorithms/dijkstras";
+import { dijkstras, getNodesInShortestPathOrder } from "./algorithms/dijkstras";
 import { nanoid } from "nanoid";
 export const NUMBER_ROWS = 40;
 export const NUMBER_COLLUMS = 20;
@@ -34,7 +34,7 @@ export default class PathfindingVisualizer extends Component {
     } = this.state;
     const startNode = grid[startRow][startCol];
     const finishNode = grid[finishRow][finishCol];
-    const visitedNodesInOrder = djikstras(grid, startNode, finishNode);
+    const visitedNodesInOrder = dijkstras(grid, startNode, finishNode);
     const nodesInShortestPath = getNodesInShortestPathOrder(finishNode);
     this.animateDijkstras(visitedNodesInOrder, nodesInShortestPath);
   }

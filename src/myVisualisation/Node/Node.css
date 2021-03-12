@@ -1,0 +1,17 @@
+.node {
+  color: whitesmoke;
+  width: 3vmin;
+  height: 3vmin;
+  background-color: white;
+  /* border: solid #000;ks */
+  margin: 2px;
+}
+.Start {
+  background-color: chartreuse;
+}
+.Finish {
+  background-color: chocolate;
+}
+.Unused {
+  background-color: white;
+}
