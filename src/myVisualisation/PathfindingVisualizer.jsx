@@ -27,11 +27,12 @@ export default class PathfindingVisualizer extends Component {
   runDijkstras() {
     const {
       grid,
-      startRow = start.row,
-      startCol = start.col,
-      finishRow = finish.row,
-      finishCol = finish.Col,
+      start: { row: startRow, col: startCol },
+      finish: { row: finishRow, col: finishCol },
     } = this.state;
+    // const { startRow: row, startCol = col } = this.state.start;
+    // const { finishRow: row, finishCol = col } = this.state.finish;
+
     const startNode = grid[startRow][startCol];
     const finishNode = grid[finishRow][finishCol];
     const visitedNodesInOrder = dijkstras(grid, startNode, finishNode);
@@ -94,7 +95,7 @@ class NodeCl {
       row === parentState.finish.row && col === parentState.finish.col;
     this.distance = Infinity;
     this.predecessor = null;
-    this.isVisited = flase;
+    this.isVisited = false;
     this.id = nanoid();
   }
 }

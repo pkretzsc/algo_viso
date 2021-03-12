@@ -19,7 +19,7 @@ export function dijkstras (grid, startNode, finishNode) {
 function addNeighbors(curNode,heap,grid){
     let {row,col} = curNode;
     let untouchedNeighbors = newNeighbors(row,col,grid);
-    for(neighbor in untouchedNeighbors){
+    for(let neighbor in untouchedNeighbors){
         neighbor.distance = curNode.distance + 1;
         neighbor.predecessor = curNode;
         heap.push(neighbor);
