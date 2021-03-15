@@ -1,65 +1,101 @@
-import {NUMBER_ROWS} from "./../PathfindingVisualizer"
-import {NUMBER_COLLUMS} from "./../PathfindingVisualizer"
+import { NUMBER_ROWS } from "./../PathfindingVisualizer";
+import { NUMBER_COLLUMS } from "./../PathfindingVisualizer";
 
-export function dijkstras (grid, startNode, finishNode) {
-    startNode.distance = 0;
-    let heap =[];
-    let visitedNodesInOrder = [];
-    heap.push(startNode);
-    // console.log('Start Dijkstras');
-    while(!!heap.length){
-        // console.log('while loop');
-        let curNode = heap.shift();
-        // curNode.isVisited = true;
-        addNeighbors(curNode,heap,grid);
-        // console.log(heap.length, 'heap length');
-        visitedNodesInOrder.push(curNode);
-        if(curNode.id === finishNode.id){
-            visitedNodesInOrder.shift();
-            visitedNodesInOrder.pop();
-            return visitedNodesInOrder;
-        } 
+export function runDijkstras(parentState) {
+  const {
+    grid,
+    start: { row: startRow, col: startCol },
+    finish: { row: finishRow, col: finishCol },
+  } = parentState;
+  // const { startRow: row, startCol = col } = this.state.start;
+  // const { finishRow: row, finishCol = col } = this.state.finish;
+
+  const startNode = grid[startRow][startCol];
+  const finishNode = grid[finishRow][finishCol];
+  const visitedNodesInOrder = dijkstras(grid, startNode, finishNode);
+  const nodesInShortestPath = getNodesInShortestPathOrder(finishNode);
+  animateDijkstras(visitedNodesInOrder, nodesInShortestPath);
+}
+function animateDijkstras(visitedNodesInOrder, nodesInShortestPath) {
+  console.log("start animation");
+  for (let i = 0; i < visitedNodesInOrder.length; i++) {
+    const curNode = visitedNodesInOrder[i];
+    setTimeout(() => {
+      document.getElementById(`node-${curNode.id}`).className = "node Visited";
+    }, 3 * i);
+    //start printing shortest path
+    if (i === visitedNodesInOrder.length - 1) {
+      // console.log("start shortest path");
+      setTimeout(() => animateShortestPath(nodesInShortestPath), 3 * i);
     }
-    console.log('finish not found');
+  }
+}
+function animateShortestPath(nodesInShortestPath) {
+  for (let i = 0; i < nodesInShortestPath.length; i++) {
+    const curNode = nodesInShortestPath[i];
+    setTimeout(() => {
+      //animate in shortest path in line
+      document.getElementById(`node-${curNode.id}`).className = "node Shortest";
+    }, 50 * i);
+  }
+}
 
+function dijkstras(grid, startNode, finishNode) {
+  startNode.distance = 0;
+  let heap = [];
+  let visitedNodesInOrder = [];
+  heap.push(startNode);
+  console.log(startNode, "Start Dijkstras");
+  while (!!heap.length) {
+    // console.log('while loop');
+    let curNode = heap.shift();
+    // curNode.isVisited = true;
+    addNeighbors(curNode, heap, grid);
+    // console.log(heap.length, 'heap length');
+    visitedNodesInOrder.push(curNode);
+    if (curNode.id === finishNode.id) {
+      visitedNodesInOrder.shift();
+      visitedNodesInOrder.pop();
+      return visitedNodesInOrder;
+    }
+  }
+  console.log("finish not found");
 }
 //get the untouched Neighbors of curNode and init them and push them into the heap
-function addNeighbors(curNode,heap,grid){
-    let {row,col} = curNode;
-    let untouchedNeighbors = newNeighbors(row,col,grid);
-    // console.log(untouchedNeighbors,'untouchedN')
-    // for(let neighbor in untouchedNeighbors){
-    //     neighbor.distance = curNode.distance + 1;
-    //     neighbor.predecessor = curNode;
-    //     heap.push(neighbor);
-    // }
-    untouchedNeighbors.forEach(neighbor => {
-        neighbor.distance = curNode.distance + 1;
-        neighbor.predecessor = curNode;
-        heap.push(neighbor);
-    })
-    
-    
+function addNeighbors(curNode, heap, grid) {
+  let { row, col } = curNode;
+  let untouchedNeighbors = newNeighbors(row, col, grid);
+  // console.log(untouchedNeighbors,'untouchedN')
+  // for(let neighbor in untouchedNeighbors){
+  //     neighbor.distance = curNode.distance + 1;
+  //     neighbor.predecessor = curNode;
+  //     heap.push(neighbor);
+  // }
+  untouchedNeighbors.forEach((neighbor) => {
+    neighbor.distance = curNode.distance + 1;
+    neighbor.predecessor = curNode;
+    heap.push(neighbor);
+  });
 }
 //return all neighbors that didnt got a distance yet, therefor being untouched
-function newNeighbors(row,col,grid){
-    let neighbors = [];
-    if(row > 0)neighbors.push(grid[row - 1][col]);
-    if(row < NUMBER_ROWS - 1)neighbors.push(grid[row + 1][col]);
-    if(col > 0)neighbors.push(grid[row][col - 1]);
-    if(col < NUMBER_COLLUMS - 1)neighbors.push(grid[row][col + 1]);
-    // console.log(neighbors,'newNeighbors');
-    return neighbors.filter(neighbor => neighbor.distance === Infinity);
+function newNeighbors(row, col, grid) {
+  let neighbors = [];
+  if (row > 0) neighbors.push(grid[row - 1][col]);
+  if (row < NUMBER_ROWS - 1) neighbors.push(grid[row + 1][col]);
+  if (col > 0) neighbors.push(grid[row][col - 1]);
+  if (col < NUMBER_COLLUMS - 1) neighbors.push(grid[row][col + 1]);
+  // console.log(neighbors,'newNeighbors');
+  return neighbors.filter((neighbor) => neighbor.distance === Infinity);
 }
 
-export function getNodesInShortestPathOrder(finishNode) {
-    let curNode = finishNode;
-    let shortestPath = [];
-    while(curNode != null){
-        shortestPath.unshift(curNode)
-        curNode = curNode.predecessor;
-    }
-    shortestPath.pop();
-    shortestPath.shift();
-    return shortestPath;
+function getNodesInShortestPathOrder(finishNode) {
+  let curNode = finishNode;
+  let shortestPath = [];
+  while (curNode != null) {
+    shortestPath.unshift(curNode);
+    curNode = curNode.predecessor;
+  }
+  shortestPath.pop();
+  shortestPath.shift();
+  return shortestPath;
 }

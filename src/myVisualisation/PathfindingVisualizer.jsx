@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Node from "./Node/Node";
 import "./PathfindingVisualizer.css";
 import logo from "./../logo.svg";
-import { dijkstras, getNodesInShortestPathOrder } from "./algorithms/dijkstras";
+import { runDijkstras } from "./algorithms/dijkstras";
 import { nanoid } from "nanoid";
 export const NUMBER_ROWS = 40;
 export const NUMBER_COLLUMS = 20;
@@ -10,6 +10,7 @@ export default class PathfindingVisualizer extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isStarted: false,
       grid: [],
       start: {
         row: 4,
@@ -24,58 +25,43 @@ export default class PathfindingVisualizer extends Component {
   componentDidMount() {
     this.setState({ grid: createGrid(this.state) });
   }
-  runDijkstras() {
-    const {
-      grid,
-      start: { row: startRow, col: startCol },
-      finish: { row: finishRow, col: finishCol },
-    } = this.state;
-    // const { startRow: row, startCol = col } = this.state.start;
-    // const { finishRow: row, finishCol = col } = this.state.finish;
+  startHandler() {
+    if (!this.state.isStarted) {
+      runDijkstras(this.state);
+    } else {
+      //reset grid
+      this.resetGrid();
+    }
+    this.setState((prevState) => ({
+      isStarted: !prevState.isStarted,
+    }));
+  }
+  resetGrid() {
+    this.state.grid.forEach((curRow) =>
+      curRow.forEach((curNode) => {
+        document.getElementById(`node-${curNode.id}`).className = "node Unused";
+        curNode.isVisited = false;
+        curNode.distance = Infinity;
+        curNode.predecessor = null;
+      })
+    );
+  }
 
-    const startNode = grid[startRow][startCol];
-    const finishNode = grid[finishRow][finishCol];
-    const visitedNodesInOrder = dijkstras(grid, startNode, finishNode);
-    // console.log(visitedNodesInOrder);
-    const nodesInShortestPath = getNodesInShortestPathOrder(finishNode);
-    // console.log(nodesInShortestPath);
-    this.animateDijkstras(visitedNodesInOrder, nodesInShortestPath);
-  }
-  animateDijkstras(visitedNodesInOrder, nodesInShortestPath) {
-    console.log("start animation");
-    for (let i = 0; i < visitedNodesInOrder.length; i++) {
-      // console.log(i);
-      const curNode = visitedNodesInOrder[i];
-      setTimeout(() => {
-        // const { row, col } = nodesInShortestPath[i];
-        document.getElementById(`node-${curNode.id}`).className =
-          "node Visited";
-      }, 10 * i);
-      if (i === visitedNodesInOrder.length - 1) {
-        // console.log("start shortest pat h");
-        setTimeout(() => this.animateShortestPath(nodesInShortestPath), 10 * i);
-      }
-    }
-  }
-  animateShortestPath(nodesInShortestPath) {
-    for (let i = 0; i < nodesInShortestPath.length; i++) {
-      const curNode = nodesInShortestPath[i];
-      setTimeout(() => {
-        // const { row, col } = nodesInShortestPath[i];
-        document.getElementById(`node-${curNode.id}`).className =
-          "node Shortest";
-      }, 50 * i);
-    }
-  }
   render() {
     const { grid } = this.state;
     return (
       <div>
         <header className="PVHeader">
           <img src={logo} className="App-logo" alt="logo " />
-          <button onClick={() => this.runDijkstras()}>
-            Run Dijkstras Algorithm
-          </button>
+          <div className="ButtonBar">
+            <button onClick={() => this.startHandler()}>
+              {this.state.isStarted ? "Reset Grid" : "Run Dijkstras Algorithm"}
+            </button>
+            <button onClick={() => this.ResetHandler()}>
+              {this.state.isStarted ? "Reset Grid" : "Run Dijkstras Algorithm"}
+            </button>
+          </div>
+
           <div className="NodeGrid">
             {grid.map((row, rowIdx) => {
               return (
