@@ -26,12 +26,13 @@ export default class PathfindingVisualizer extends Component {
     this.setState({ grid: createGrid(this.state) });
   }
   startHandler() {
-    if (!this.state.isStarted) {
-      runDijkstras(this.state);
-    } else {
-      //reset grid
-      this.resetGrid();
-    }
+    runDijkstras(this.state);
+    this.setState((prevState) => ({
+      isStarted: !prevState.isStarted,
+    }));
+  }
+  resetHandler() {
+    this.resetGrid();
     this.setState((prevState) => ({
       isStarted: !prevState.isStarted,
     }));
@@ -54,14 +55,19 @@ export default class PathfindingVisualizer extends Component {
         <header className="PVHeader">
           <img src={logo} className="App-logo" alt="logo " />
           <div className="ButtonBar">
-            <button onClick={() => this.startHandler()}>
-              {this.state.isStarted ? "Reset Grid" : "Run Dijkstras Algorithm"}
+            <button
+              disabled={this.state.isStarted}
+              onClick={() => this.startHandler()}
+            >
+              Run Dijkstras Algorithm
             </button>
-            <button onClick={() => this.ResetHandler()}>
-              {this.state.isStarted ? "Reset Grid" : "Run Dijkstras Algorithm"}
+            <button
+              disabled={!this.state.isStarted}
+              onClick={() => this.resetHandler()}
+            >
+              Reset Grid
             </button>
           </div>
-
           <div className="NodeGrid">
             {grid.map((row, rowIdx) => {
               return (

@@ -36,7 +36,7 @@ function animateShortestPath(nodesInShortestPath) {
     setTimeout(() => {
       //animate in shortest path in line
       document.getElementById(`node-${curNode.id}`).className = "node Shortest";
-    }, 50 * i);
+    }, 20 * i);
   }
 }
 
