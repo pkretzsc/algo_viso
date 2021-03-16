@@ -8,9 +8,21 @@ export default class Node extends Component {
     };
   }
   render() {
-    const { row, col, id, isStart, isFinish } = this.props;
-    let status = isStart ? "Start" : isFinish ? "Finish" : "Unused";
-    return <div id={`node-${id}`} className={`node ${status}`}></div>;
+    const { row, col, id, isStart, isFinish, isWall, onMouseDown } = this.props;
+    let status = isStart
+      ? "Start"
+      : isFinish
+      ? "Finish"
+      : isWall
+      ? "Wall"
+      : "Unused";
+    return (
+      <div
+        id={`node-${id}`}
+        className={`node ${status}`}
+        onMouseDown={() => onMouseDown(row, col)}
+      ></div>
+    );
   }
 }
 

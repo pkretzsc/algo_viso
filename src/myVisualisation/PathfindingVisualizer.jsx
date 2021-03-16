@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Node from "./Node/Node";
 import "./PathfindingVisualizer.css";
 import logo from "./../logo.svg";
-import { runDijkstras } from "./algorithms/dijkstras";
+import { dijkstras, getNodesInShortestPathOrder } from "./algorithms/dijkstras";
 import { nanoid } from "nanoid";
 export const NUMBER_ROWS = 40;
 export const NUMBER_COLLUMS = 20;
@@ -10,7 +10,8 @@ export default class PathfindingVisualizer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isStarted: false,
+      isStarted: false, //run algo was started, resets with reset
+      isRunning: false, //algo is running, resets after finish
       grid: [],
       start: {
         row: 4,
@@ -25,25 +26,85 @@ export default class PathfindingVisualizer extends Component {
   componentDidMount() {
     this.setState({ grid: createGrid(this.state) });
   }
+
+  runDijkstras() {
+    const {
+      grid,
+      start: { row: startRow, col: startCol },
+      finish: { row: finishRow, col: finishCol },
+    } = this.state;
+    const startNode = grid[startRow][startCol];
+    const finishNode = grid[finishRow][finishCol];
+    const visitedNodesInOrder = dijkstras(grid, startNode, finishNode);
+    const nodesInShortestPath = getNodesInShortestPathOrder(finishNode);
+    this.animateAlgo(visitedNodesInOrder, nodesInShortestPath);
+  }
+
+  animateAlgo(visitedNodesInOrder, nodesInShortestPath) {
+    console.log("start animation");
+    for (let i = 0; i < visitedNodesInOrder.length; i++) {
+      const curNode = visitedNodesInOrder[i];
+      setTimeout(() => {
+        document.getElementById(`node-${curNode.id}`).className =
+          "node Visited";
+      }, 3 * i);
+      //start printing shortest path
+      if (i === visitedNodesInOrder.length - 1) {
+        // console.log("start shortest path");
+        setTimeout(() => this.animateShortestPath(nodesInShortestPath), 3 * i);
+      }
+    }
+  }
+
+  animateShortestPath(nodesInShortestPath) {
+    for (let i = 0; i < nodesInShortestPath.length; i++) {
+      const curNode = nodesInShortestPath[i];
+      setTimeout(() => {
+        //animate in shortest path in line
+        document.getElementById(`node-${curNode.id}`).className =
+          "node Shortest";
+        if (i === nodesInShortestPath.length - 1) {
+          this.setState({ isRunning: false });
+        }
+      }, 20 * i);
+    }
+  }
+
   startHandler() {
-    runDijkstras(this.state);
+    this.runDijkstras();
     this.setState((prevState) => ({
-      isStarted: !prevState.isStarted,
+      isStarted: true,
+      isRunning: true,
     }));
   }
+
+  //TODO prevent early reset and keep start and finish
   resetHandler() {
     this.resetGrid();
     this.setState((prevState) => ({
-      isStarted: !prevState.isStarted,
+      isStarted: false,
     }));
+  }
+  mouseDownHandler(row, col) {
+    console.log("mouseDown");
+    let newGrid = gridToggleWall(this.state.grid, row, col);
+    this.setState({ grid: newGrid });
   }
   resetGrid() {
     this.state.grid.forEach((curRow) =>
       curRow.forEach((curNode) => {
-        document.getElementById(`node-${curNode.id}`).className = "node Unused";
-        curNode.isVisited = false;
-        curNode.distance = Infinity;
-        curNode.predecessor = null;
+        if (!curNode.isStart && !curNode.isFinish) {
+          document.getElementById(`node-${curNode.id}`).className =
+            "node Unused";
+          curNode.isWall = false;
+          curNode.isVisited = false;
+          curNode.distance = Infinity;
+          curNode.predecessor = null;
+        } else {
+          curNode.isVisited = false;
+          curNode.distance = Infinity;
+          curNode.predecessor = null;
+        }
       })
     );
   }
@@ -62,7 +123,7 @@ export default class PathfindingVisualizer extends Component {
               Run Dijkstras Algorithm
             </button>
             <button
-              disabled={!this.state.isStarted}
+              disabled={this.state.isRunning}
               onClick={() => this.resetHandler()}
             >
               Reset Grid
@@ -77,9 +138,13 @@ export default class PathfindingVisualizer extends Component {
                       key={`r${rowIdx}c${colIdx}`}
                       isStart={node.isStart}
                       isFinish={node.isFinish}
+                      isWall={node.isWall}
                       id={node.id}
                       row={node.row}
                       col={node.col}
+                      onMouseDown={(row, col) =>
+                        this.mouseDownHandler(row, col)
+                      }
                     />
                   ))}
                 </div>
@@ -105,7 +170,13 @@ class NodeCl {
     this.predecessor = null;
     this.isVisited = false;
     this.id = nanoid(); //to directly identify nodes
+    this.isWall = false;
   }
+}
+
+function gridToggleWall(grid, row, col) {
+  grid[row][col].isWall = true;
+  return grid;
 }
 
 //create initial grid

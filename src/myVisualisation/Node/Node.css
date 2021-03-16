@@ -12,6 +12,9 @@
 .Finish {
   background-color: rgb(243, 121, 34);
 }
+.Wall {
+  background-color: black;
+}
 .Unused {
   background-color: #dad7cd;
 }

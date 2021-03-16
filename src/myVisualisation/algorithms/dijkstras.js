@@ -1,46 +1,7 @@
 import { NUMBER_ROWS } from "./../PathfindingVisualizer";
 import { NUMBER_COLLUMS } from "./../PathfindingVisualizer";
 
-export function runDijkstras(parentState) {
-  const {
-    grid,
-    start: { row: startRow, col: startCol },
-    finish: { row: finishRow, col: finishCol },
-  } = parentState;
-  // const { startRow: row, startCol = col } = this.state.start;
-  // const { finishRow: row, finishCol = col } = this.state.finish;
-
-  const startNode = grid[startRow][startCol];
-  const finishNode = grid[finishRow][finishCol];
-  const visitedNodesInOrder = dijkstras(grid, startNode, finishNode);
-  const nodesInShortestPath = getNodesInShortestPathOrder(finishNode);
-  animateDijkstras(visitedNodesInOrder, nodesInShortestPath);
-}
-function animateDijkstras(visitedNodesInOrder, nodesInShortestPath) {
-  console.log("start animation");
-  for (let i = 0; i < visitedNodesInOrder.length; i++) {
-    const curNode = visitedNodesInOrder[i];
-    setTimeout(() => {
-      document.getElementById(`node-${curNode.id}`).className = "node Visited";
-    }, 3 * i);
-    //start printing shortest path
-    if (i === visitedNodesInOrder.length - 1) {
-      // console.log("start shortest path");
-      setTimeout(() => animateShortestPath(nodesInShortestPath), 3 * i);
-    }
-  }
-}
-function animateShortestPath(nodesInShortestPath) {
-  for (let i = 0; i < nodesInShortestPath.length; i++) {
-    const curNode = nodesInShortestPath[i];
-    setTimeout(() => {
-      //animate in shortest path in line
-      document.getElementById(`node-${curNode.id}`).className = "node Shortest";
-    }, 20 * i);
-  }
-}
-
-function dijkstras(grid, startNode, finishNode) {
+export function dijkstras(grid, startNode, finishNode) {
   startNode.distance = 0;
   let heap = [];
   let visitedNodesInOrder = [];
@@ -88,7 +49,7 @@ function newNeighbors(row, col, grid) {
   return neighbors.filter((neighbor) => neighbor.distance === Infinity);
 }
 
-function getNodesInShortestPathOrder(finishNode) {
+export function getNodesInShortestPathOrder(finishNode) {
   let curNode = finishNode;
   let shortestPath = [];
   while (curNode != null) {
