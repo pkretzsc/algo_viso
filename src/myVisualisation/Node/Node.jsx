@@ -4,11 +4,23 @@ export default class Node extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // status: calcState(this.props),
+      // status: calcState(this.props  ),
     };
   }
   render() {
-    const { row, col, id, isStart, isFinish, isWall, onMouseDown } = this.props;
+    const {
+      row,
+      col,
+      id,
+      isStart,
+      isFinish,
+      isWall,
+      onMouseDown,
+      onMouseEnter,
+      onMouseUp,
+      isVisited,
+      isShortest,
+    } = this.props;
     let status = isStart
       ? "Start"
       : isFinish
@@ -16,12 +28,19 @@ export default class Node extends Component {
       : isWall
       ? "Wall"
       : "Unused";
+
     return (
-      <div
-        id={`node-${id}`}
-        className={`node ${status}`}
-        onMouseDown={() => onMouseDown(row, col)}
-      ></div>
+      <div className="NodeBorder">
+        <div
+          id={`node-${id}`}
+          className={`node ${status}`}
+          ondragstart="return false;"
+          ondrop="return false;"
+          onMouseDown={() => onMouseDown(row, col)}
+          onMouseEnter={() => onMouseEnter(row, col)}
+          onMouseUp={() => onMouseUp(row, col)}
+        ></div>
+      </div>
     );
   }
 }

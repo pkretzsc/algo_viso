@@ -1,14 +1,57 @@
-.App-logo {
-  height: 20vmin;
+.Logo-Container{
+  width: 95vw;
+}
+.App-logo-1 {
+  height: 10vmin;
   pointer-events: none;
+  margin-right: 90px;
+  float:right;
+  
+}
+.App-logo-2 {
+  height: 10vmin;
+  pointer-events: none;
+  margin-right: 90px;
+  float:right;
+  /* rotate: 120deg; */
+  
+}
+.App-logo-3 {
+  height: 10vmin;
+  pointer-events: none;
+  margin-right: 90px;
+  float:right;
+  /* rotate: 240deg; */
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+  .App-logo-1 {
+    animation: App-logo-spin-1 infinite 20s linear;
+  }
+  .App-logo-2 {
+    animation: App-logo-spin-2 infinite 15s linear;
+  }
+  .App-logo-3 {
+    animation: App-logo-spin-3 infinite 10s linear;
   }
 }
-@keyframes App-logo-spin {
+@keyframes App-logo-spin-1 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes App-logo-spin-2 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes App-logo-spin-3 {
   from {
     transform: rotate(0deg);
   }
@@ -17,7 +60,7 @@
   }
 }
 .PVHeader {
-  background-color: #344e41;
+  background-color: #25382f;
   /* #282c34 */
   min-height: 100vh;
   display: flex;
@@ -27,7 +70,12 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
+.ButtonBar {
+  margin: 10px;
+}
 .NodeGrid {
   display: flex;
   flex-direction: row;
+  border: solid #5d887275 1px
 }

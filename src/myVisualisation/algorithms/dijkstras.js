@@ -21,6 +21,7 @@ export function dijkstras(grid, startNode, finishNode) {
     }
   }
   console.log("finish not found");
+  return visitedNodesInOrder;
 }
 //get the untouched Neighbors of curNode and init them and push them into the heap
 function addNeighbors(curNode, heap, grid) {
@@ -46,7 +47,9 @@ function newNeighbors(row, col, grid) {
   if (col > 0) neighbors.push(grid[row][col - 1]);
   if (col < NUMBER_COLLUMS - 1) neighbors.push(grid[row][col + 1]);
   // console.log(neighbors,'newNeighbors');
-  return neighbors.filter((neighbor) => neighbor.distance === Infinity);
+  return neighbors.filter(
+    (neighbor) => neighbor.distance === Infinity && !neighbor.isWall
+  );
 }
 
 export function getNodesInShortestPathOrder(finishNode) {

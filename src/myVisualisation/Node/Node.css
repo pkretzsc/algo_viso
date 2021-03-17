@@ -1,26 +1,179 @@
 .node {
   color: whitesmoke;
-  width: 3vmin;
-  height: 3vmin;
+  width: 1.5vw;
+  height: 1.5vw;
   background-color: black;
-  border: solid #000 1px;
+  /* border: solid #527260 1px; */
+  border-radius: 0%;
   /* margin: 2px; */
+  /* disable dragging */
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.NodeBorder {
+  border: solid #527260 1px;
 }
 .Start {
-  background-color: chartreuse;
+  background-color: #00A73B;
 }
 .Finish {
-  background-color: rgb(243, 121, 34);
+  background-color: #AE652C;
 }
+
 .Wall {
-  background-color: black;
+  /* background-color: #1b3e9c; */
+  animation-name: wallAnimation;
+  animation-duration: 0.2s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  /* animation-play-state: running; */
+
+}
+
+@keyframes wallAnimation {
+  0% {
+    transform: scale(1);
+    background-color: #344e41;
+    border-radius: 0%;
+  }
+
+  /* 50% {
+    background-color: #050380;
+  } */
+/* 
+  50% {
+    transform: scale(0.3);
+    background-color: #0b42a7;
+    border-radius: 100%;
+  } */
+  75% {
+    transform: scale(1.2);
+    /* background-color: #0e3783; */
+    /* border-radius: 100%; */
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: #03123a;
+
+  }
 }
 .Unused {
-  background-color: #dad7cd;
+  background-color: #344e41;
 }
+/* .Unused {
+  animation-name: unusedAnimation;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+
+}
+
+@keyframes unusedAnimation {
+  0% {
+    transform: scale(1);
+    background-color: #344e41;
+    border-radius: 0%;
+  }
+
+  /* 50% {
+    background-color: #050380;
+  
+
+  50% {
+    transform: scale(1.05);
+    background-color: #1b2e24;
+    border-radius: 80%;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color:  #344e41;
+
+  }
+} */
+
 .Shortest {
-  background-color: #a3b18a;
+  animation-name: shortestAnimation;
+  animation-duration: 1.3s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+
+}
+
+@keyframes shortestAnimation {
+  0% {
+    transform: scale(0.7);
+    background-color: #B07D1E;
+    /* border: solid #B07D1E 1px; */
+    border-radius: 30%;
+  }
+
+  50% {
+    background-color: #C2820C;
+    /* border: solid #C2820C 1px; */
+    transform: scale(1.05);
+  }
+
+  75% {
+    
+    background-color: #e29911;
+    /* border: solid #e29911 1px; */
+    /* #f3b238 */
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: #F09E07;
+    /* border: solid #F09E07 1px; */
+
+  }
 }
 .Visited {
-  background-color: #588157;
+  animation-name: visitedAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+
+}
+
+@keyframes visitedAnimation {
+  0% {
+    transform: scale(0.3);
+    background-color: #607744;
+    border-radius: 100%;
+  }
+
+  50% {
+    background-color: #8dc016;
+  }
+
+  75% {
+    transform: scale(1.2);
+    background-color: #20AC40;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: #88be47b7;
+
+  }
 }
