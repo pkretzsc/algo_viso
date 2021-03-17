@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./Node.css";
+import elena from "./../media/Elena.png";
 export default class Node extends Component {
   constructor(props) {
     super(props);

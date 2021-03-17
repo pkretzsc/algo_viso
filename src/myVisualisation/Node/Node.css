@@ -3,7 +3,7 @@
   width: 1.5vw;
   height: 1.5vw;
   background-color: black;
-  /* border: solid #527260 1px; */
+  border: solid #527260 1px;
   border-radius: 0%;
   /* margin: 2px; */
   /* disable dragging */
@@ -14,7 +14,7 @@
   user-select: none;
 }
 .NodeBorder {
-  border: solid #527260 1px;
+  /* border: solid #527260 1px; */
 }
 .Start {
   background-color: #00A73B;
@@ -39,7 +39,7 @@
 @keyframes wallAnimation {
   0% {
     transform: scale(1);
-    background-color: #344e41;
+    background-color: #06216b;
     border-radius: 0%;
   }
 
@@ -65,7 +65,7 @@
   }
 }
 .Unused {
-  background-color: #344e41;
+  background-color: #344e41e5;
 }
 /* .Unused {
   animation-name: unusedAnimation;
@@ -124,14 +124,15 @@
   }
 
   50% {
-    background-color: #C2820C;
+    /* background-color: #C2820C; */
+    background-image: url(./../media/Elena.png);
     /* border: solid #C2820C 1px; */
     transform: scale(1.05);
   }
 
   75% {
     
-    background-color: #e29911;
+    background-color: #f0a00c;
     /* border: solid #e29911 1px; */
     /* #f3b238 */
   }
@@ -158,7 +159,7 @@
 @keyframes visitedAnimation {
   0% {
     transform: scale(0.3);
-    background-color: #607744;
+    background-color: #dfee0d;
     border-radius: 100%;
   }
 
@@ -173,7 +174,7 @@
 
   100% {
     transform: scale(1);
-    background-color: #88be47b7;
+    background-color: #88be47e3;
 
   }
 }

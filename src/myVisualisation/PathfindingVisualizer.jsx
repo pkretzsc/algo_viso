@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Node from "./Node/Node";
 import "./PathfindingVisualizer.css";
 import logo from "./../logo.svg";
-import elena from "./media/Spinnin_Elena.png";
+import elena from "./media/Elena.png";
 import ari from "./media/Ari.png";
 import fabio from "./media/Fabio.png";
 import jan from "./media/Janniboy.png";
@@ -89,34 +89,65 @@ export default class PathfindingVisualizer extends Component {
     }));
   }
 
-  resetHandler() {
-    this.resetGrid(this.state.grid);
-    this.setState((prevState) => ({
-      isStarted: false,
-      // grid: newGrid,
-    }));
-  }
   mouseClickHandler(row, col) {
-    let newGrid = gridToggleWall(this.state.grid, row, col);
-    this.setState({ grid: newGrid, mouseDown: true });
+    if (!this.state.isStarted) {
+      let newGrid = gridToggleWall(this.state.grid, row, col);
+      this.setState({ grid: newGrid, mouseDown: true });
+    }
   }
   mouseDownHandler(row, col) {
-    let newGrid = gridToggleWall(this.state.grid, row, col);
-    this.setState({ grid: newGrid, mouseDown: true });
+    if (!this.state.isStarted) {
+      let newGrid = gridToggleWall(this.state.grid, row, col);
+      this.setState({ grid: newGrid, mouseDown: true });
+    }
   }
   mouseEnterHandler(row, col) {
-    if (this.state.mouseDown) {
-      let newGrid = gridToggleWall(this.state.grid, row, col);
-      this.setState({ grid: newGrid });
+    if (!this.state.isStarted) {
+      if (this.state.mouseDown) {
+        let newGrid = gridToggleWall(this.state.grid, row, col);
+        this.setState({ grid: newGrid });
+      }
     }
   }
   mouseUpHandler(row, col) {
     console.log("mouseUpHandler");
     this.setState({ mouseDown: false });
   }
-
+  resetGridHandler() {
+    this.resetGrid(this.state.grid);
+    this.setState((prevState) => ({
+      isStarted: false,
+      // grid: newGrid,
+    }));
+  }
   //think about passing in grid and rendering it again
   resetGrid(grid) {
+    grid.forEach((curRow) =>
+      curRow.forEach((curNode) => {
+        if (!curNode.isStart && !curNode.isFinish && !curNode.isWall) {
+          document.getElementById(`node-${curNode.id}`).className =
+            "node Unused";
+          curNode.isWall = false;
+          curNode.isVisited = false;
+          curNode.isShortest = false;
+          curNode.distance = Infinity;
+          curNode.predecessor = null;
+        } else {
+          curNode.isVisited = false;
+          curNode.distance = Infinity;
+          curNode.predecessor = null;
+        }
+      })
+    );
+    return grid;
+  }
+  resetWallsHandler() {
+    this.resetWalls(this.state.grid);
+    this.setState((prevState) => ({
+      isStarted: false,
+    }));
+  }
+  resetWalls(grid) {
     grid.forEach((curRow) =>
       curRow.forEach((curNode) => {
         if (!curNode.isStart && !curNode.isFinish) {
@@ -136,6 +167,23 @@ export default class PathfindingVisualizer extends Component {
     );
     return grid;
   }
+  //think about passing in grid and rendering it again
+  // resetWalls(grid) {
+  //   grid.forEach((curRow) =>
+  //     curRow.forEach((curNode) => {
+  //       if (!curNode.isStart && !curNode.isFinish && curNode.isWall) {
+  //         document.getElementById(`node-${curNode.id}`).className =
+  //           "node Unused";
+  //         curNode.isWall = false;
+  //         curNode.isVisited = false;
+  //         curNode.isShortest = false;
+  //         curNode.distance = Infinity;
+  //         curNode.predecessor = null;
+  //       }
+  //     })
+  //   );
+  //   return grid;
+  // }
 
   render() {
     const { grid } = this.state;
@@ -143,18 +191,7 @@ export default class PathfindingVisualizer extends Component {
     return (
       <div>
         <header className="PVHeader">
-          <div className="Logo-Container">
-            <img src={elena} className="App-logo-1" alt="logo " />
-            <img src={ari} className="App-logo-3" alt="logo " />
-            <img src={fabio} className="App-logo-2" alt="logo " />
-            <img src={jan} className="App-logo-3" alt="logo " />
-            <img src={jerome} className="App-logo-1" alt="logo " />
-            <img src={lilli} className="App-logo-2" alt="logo " />
-            <img src={marlen} className="App-logo-3" alt="logo " />
-            <img src={martin} className="App-logo-1" alt="logo " />
-            <img src={max} className="App-logo-3" alt="logo " />
-            <img src={paul} className="App-logo-2" alt="logo " />
-          </div>
+          <h1>Pathfinding Visualiser</h1>
           <div className="ButtonBar">
             <button
               disabled={this.state.isStarted}
@@ -164,11 +201,19 @@ export default class PathfindingVisualizer extends Component {
             </button>
             <button
               disabled={this.state.isRunning}
-              onClick={() => this.resetHandler()}
+              onClick={() => this.resetGridHandler()}
             >
               Reset Grid
             </button>
+            <button
+              disabled={this.state.isRunning}
+              onClick={() => this.resetWallsHandler()}
+            >
+              Reset Walls
+            </button>
           </div>
+        </header>
+        <main>
           <div
             className="NodeGrid"
             onMouseLeave={(row, col) => this.mouseUpHandler(row, col)}
@@ -200,7 +245,19 @@ export default class PathfindingVisualizer extends Component {
               );
             })}
           </div>
-        </header>
+          <div className="Logo-Container">
+            <img src={elena} className="App-logo-1" alt="logo " />
+            <img src={ari} className="App-logo-3" alt="logo " />
+            <img src={fabio} className="App-logo-2" alt="logo " />
+            <img src={jan} className="App-logo-3" alt="logo " />
+            <img src={jerome} className="App-logo-1" alt="logo " />
+            <img src={lilli} className="App-logo-2" alt="logo " />
+            <img src={marlen} className="App-logo-3" alt="logo " />
+            <img src={martin} className="App-logo-1" alt="logo " />
+            <img src={max} className="App-logo-3" alt="logo " />
+            <img src={paul} className="App-logo-2" alt="logo " />
+          </div>
+        </main>
       </div>
     );
   }
@@ -225,7 +282,11 @@ class NodeCl {
 }
 
 function gridToggleWall(grid, row, col) {
-  grid[row][col].isWall = !grid[row][col].isWall;
+  let curNode = grid[row][col];
+  if (!curNode.isStart && !curNode.isFinish) {
+    curNode.isWall = !curNode.isWall;
+  }
+
   return grid;
 }
 

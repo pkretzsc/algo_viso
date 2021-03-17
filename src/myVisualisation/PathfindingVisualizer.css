@@ -1,15 +1,19 @@
+h1 {
+  font-size: calc(0px + 4vmin);
+  margin: 0vh;
+}
 .Logo-Container{
   width: 95vw;
 }
 .App-logo-1 {
-  height: 10vmin;
+  height: 5vh;
   pointer-events: none;
   margin-right: 90px;
   float:right;
   
 }
 .App-logo-2 {
-  height: 10vmin;
+  height: 5vh;
   pointer-events: none;
   margin-right: 90px;
   float:right;
@@ -17,7 +21,7 @@
   
 }
 .App-logo-3 {
-  height: 10vmin;
+  height: 5vh;
   pointer-events: none;
   margin-right: 90px;
   float:right;
@@ -61,8 +65,21 @@
 }
 .PVHeader {
   background-color: #25382f;
+  /* background-image: url(https://lh3.googleusercontent.com/nFmvl0_IY67F-YhtfMgL2EvlYMmkX17jCFh-veVOiCPebyk83z99oFu95PEbhwpioaOOY2hvtahc-kBgpZWVw_hgDWWQ6mhcl5X-dhY2eSI_JxoY4Jp9dD7HjBZB7JT0DH-t4vZ7FA=w2400); */
   /* #282c34 */
-  min-height: 100vh;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+main {
+  background-color: #25382f;
+  background-image: url(https://lh3.googleusercontent.com/nFmvl0_IY67F-YhtfMgL2EvlYMmkX17jCFh-veVOiCPebyk83z99oFu95PEbhwpioaOOY2hvtahc-kBgpZWVw_hgDWWQ6mhcl5X-dhY2eSI_JxoY4Jp9dD7HjBZB7JT0DH-t4vZ7FA=w2400);
+  /* #282c34 */
+  min-height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
