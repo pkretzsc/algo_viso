@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./Node.css";
-import elena from "./../media/Elena.png";
+
 export default class Node extends Component {
   constructor(props) {
     super(props);
@@ -19,8 +19,6 @@ export default class Node extends Component {
       onMouseDown,
       onMouseEnter,
       onMouseUp,
-      isVisited,
-      isShortest,
     } = this.props;
     let status = isStart
       ? "Start"
@@ -43,15 +41,5 @@ export default class Node extends Component {
         ></div>
       </div>
     );
-  }
-}
-
-function calcState(props) {
-  if (props.isStart) {
-    return "Start";
-  } else if (props.isFinish) {
-    return "Finish";
-  } else {
-    return "Unused";
   }
 }

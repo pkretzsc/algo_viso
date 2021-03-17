@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Node from "./Node/Node";
 import "./PathfindingVisualizer.css";
-import logo from "./../logo.svg";
 import elena from "./media/Elena.png";
 import ari from "./media/Ari.png";
 import fabio from "./media/Fabio.png";
