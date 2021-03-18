@@ -17,10 +17,96 @@
   /* border: solid #527260 1px; */
 }
 .Start {
-  background-color: #00A73B;
+  background-color: #29c415;
+  animation-name: startAnimation;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+@keyframes startAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 .Finish {
-  background-color: #AE652C;
+  background-color: #ae652c;
+  animation-name: startAnimation;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+@keyframes startAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* animation finish node if no path is found */
+.NoFinishF {
+  animation-name: noFinishAnimationF;
+  animation-duration: 0.3s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: normal;
+  animation-iteration-count: 3;
+  animation-fill-mode: forwards;
+}
+@keyframes noFinishAnimationF {
+  0% {
+    transform: scale(1);
+    background-color: #ae652c;
+  }
+
+  50% {
+    background-color: #c51b1b;
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    background-color: #ae652c;
+  }
+}
+/* animation start node if no path is found */
+.NoFinishS {
+  animation-name: noFinishAnimationS;
+  animation-duration: 0.3s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: normal;
+  animation-iteration-count: 3;
+  animation-fill-mode: forwards;
+}
+@keyframes noFinishAnimationS {
+  0% {
+    transform: scale(1);
+    background-color: #29c415;
+  }
+
+  50% {
+    background-color: #c5351b;
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    background-color: #29c415;
+  }
 }
 
 .Wall {
@@ -33,7 +119,6 @@
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   /* animation-play-state: running; */
-
 }
 
 @keyframes wallAnimation {
@@ -46,7 +131,7 @@
   /* 50% {
     background-color: #050380;
   } */
-/* 
+  /* 
   50% {
     transform: scale(0.3);
     background-color: #0b42a7;
@@ -61,7 +146,6 @@
   100% {
     transform: scale(1);
     background-color: #03123a;
-
   }
 }
 .Unused {
@@ -112,13 +196,12 @@
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-play-state: running;
-
 }
 
 @keyframes shortestAnimation {
   0% {
     transform: scale(0.7);
-    background-color: #B07D1E;
+    background-color: #b07d1e;
     /* border: solid #B07D1E 1px; */
     border-radius: 30%;
   }
@@ -131,7 +214,6 @@
   }
 
   75% {
-    
     background-color: #f0a00c;
     /* border: solid #e29911 1px; */
     /* #f3b238 */
@@ -139,9 +221,7 @@
 
   100% {
     transform: scale(1);
-    background-color: #F09E07;
-    /* border: solid #F09E07 1px; */
-
+    background-color: #f09e07;
   }
 }
 .Visited {
@@ -153,7 +233,6 @@
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-play-state: running;
-
 }
 
 @keyframes visitedAnimation {
@@ -169,12 +248,11 @@
 
   75% {
     transform: scale(1.2);
-    background-color: #20AC40;
+    background-color: #20ac40;
   }
 
   100% {
     transform: scale(1);
     background-color: #88be47e3;
-
   }
 }

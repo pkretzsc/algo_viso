@@ -18,12 +18,13 @@ export default class Node extends Component {
       isWall,
       onMouseDown,
       onMouseEnter,
-      onMouseUp,
+      onMouseLeave,
+      noFinishFound,
     } = this.props;
     let status = isStart
-      ? "Start"
+      ? `Start ${noFinishFound ? "NoFinishS" : ""}`
       : isFinish
-      ? "Finish"
+      ? `Finish ${noFinishFound ? "NoFinishF" : ""}`
       : isWall
       ? "Wall"
       : "Unused";
@@ -33,11 +34,9 @@ export default class Node extends Component {
         <div
           id={`node-${id}`}
           className={`node ${status}`}
-          ondragstart="return false;"
-          ondrop="return false;"
           onMouseDown={() => onMouseDown(row, col)}
           onMouseEnter={() => onMouseEnter(row, col)}
-          onMouseUp={() => onMouseUp(row, col)}
+          onMouseLeave={() => onMouseLeave(row, col)}
         ></div>
       </div>
     );
