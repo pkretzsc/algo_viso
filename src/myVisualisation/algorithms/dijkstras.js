@@ -61,7 +61,7 @@ export function getNodesInShortestPathOrder(finishNode) {
     shortestPath.unshift(curNode);
     curNode = curNode.predecessor;
   }
-  shortestPath.pop();
-  shortestPath.shift();
+  // shortestPath.pop();
+  // shortestPath.shift();
   return shortestPath;
 }

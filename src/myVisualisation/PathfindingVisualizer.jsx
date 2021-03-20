@@ -59,33 +59,46 @@ export default class PathfindingVisualizer extends Component {
   }
 
   animateAlgo(visitedNodesInOrder, nodesInShortestPath, finishNode, startNode) {
-    console.log("start animation");
+    console.log(visitedNodesInOrder, "start animation");
+
     if (visitedNodesInOrder.length === 0) {
-    }
-    for (let i = 0; i < visitedNodesInOrder.length; i++) {
-      const curNode = visitedNodesInOrder[i];
+      //if no nodes were visited, there is no shortest path
+      startNode.noFinishFound = true;
+      finishNode.noFinishFound = true;
+
       setTimeout(() => {
-        document.getElementById(`node-${curNode.id}`).className =
-          "node Visited";
-      }, 10 * i);
-      //start printing shortest path
-      if (i === visitedNodesInOrder.length - 1) {
-        setTimeout(
-          () =>
-            this.animateShortestPath(
-              nodesInShortestPath,
-              finishNode,
-              startNode
-            ),
-          10 * i
-        );
+        finishNode.noFinishFound = false;
+        startNode.noFinishFound = false;
+        this.setState({ isRunning: false });
+      }, 1000);
+      console.log("visited 0");
+    } else {
+      for (let i = 0; i < visitedNodesInOrder.length; i++) {
+        const curNode = visitedNodesInOrder[i];
+        setTimeout(() => {
+          document.getElementById(`node-${curNode.id}`).className =
+            "node Visited";
+        }, 10 * i);
+        //start printing shortest path
+        if (i === visitedNodesInOrder.length - 1) {
+          setTimeout(
+            () =>
+              this.animateShortestPath(
+                nodesInShortestPath,
+                finishNode,
+                startNode
+              ),
+            10 * i
+          );
+        }
       }
     }
   }
 
   animateShortestPath(nodesInShortestPath, finishNode, startNode) {
-    console.log("shortest");
-    if (nodesInShortestPath.length === 0) {
+    console.log(nodesInShortestPath, "shortest");
+
+    if (nodesInShortestPath.length === 1) {
       //animate Start and Finish Node if no Path was found
       startNode.noFinishFound = true;
       finishNode.noFinishFound = true;
@@ -95,17 +108,18 @@ export default class PathfindingVisualizer extends Component {
         startNode.noFinishFound = false;
       }, 1000);
       this.setState({ isRunning: false });
-    }
-    for (let i = 0; i < nodesInShortestPath.length; i++) {
-      const curNode = nodesInShortestPath[i];
-      setTimeout(() => {
-        //animate in shortest path in line
-        document.getElementById(`node-${curNode.id}`).className =
-          "node Shortest";
-        if (i === nodesInShortestPath.length - 1) {
-          this.setState({ isRunning: false });
-        }
-      }, 20 * i);
+    } else {
+      for (let i = 0; i < nodesInShortestPath.length; i++) {
+        const curNode = nodesInShortestPath[i];
+        setTimeout(() => {
+          //animate in shortest path in line
+          document.getElementById(`node-${curNode.id}`).className =
+            "node Shortest";
+          if (i === nodesInShortestPath.length - 1) {
+            this.setState({ isRunning: false });
+          }
+        }, 20 * i);
+      }
     }
   }
 
@@ -142,7 +156,19 @@ export default class PathfindingVisualizer extends Component {
       if (this.state.mouseDownStart) {
         //make node start
         let newGrid = this.state.grid;
-        if (!newGrid[row][col].isFinish) {
+        if (
+          !(
+            this.state.grid[row - 1][col - 1].isFinish ||
+            this.state.grid[row - 1][col].isFinish ||
+            this.state.grid[row - 1][col + 1].isFinish ||
+            this.state.grid[row][col + 1].isFinish ||
+            this.state.grid[row][col].isFinish ||
+            this.state.grid[row][col - 1].isFinish ||
+            this.state.grid[row + 1][col - 1].isFinish ||
+            this.state.grid[row + 1][col].isFinish ||
+            this.state.grid[row + 1][col + 1].isFinish
+          )
+        ) {
           newGrid[this.state.start.row][this.state.start.col].isStart = false;
           newGrid[row][col].isStart = true;
           this.setState({ gird: newGrid, start: { row: row, col: col } });
@@ -150,7 +176,19 @@ export default class PathfindingVisualizer extends Component {
       } else if (this.state.mouseDownFinish) {
         //make node finish
         let newGrid = this.state.grid;
-        if (!newGrid[row][col].isStart) {
+        if (
+          !(
+            this.state.grid[row - 1][col - 1].isStart ||
+            this.state.grid[row - 1][col].isStart ||
+            this.state.grid[row - 1][col + 1].isStart ||
+            this.state.grid[row][col + 1].isStart ||
+            this.state.grid[row][col].isStart ||
+            this.state.grid[row][col - 1].isStart ||
+            this.state.grid[row + 1][col - 1].isStart ||
+            this.state.grid[row + 1][col].isStart ||
+            this.state.grid[row + 1][col + 1].isStart
+          )
+        ) {
           newGrid[this.state.finish.row][
             this.state.finish.col
           ].isFinish = false;
