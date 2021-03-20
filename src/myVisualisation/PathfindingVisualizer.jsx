@@ -60,6 +60,8 @@ export default class PathfindingVisualizer extends Component {
 
   animateAlgo(visitedNodesInOrder, nodesInShortestPath, finishNode, startNode) {
     console.log("start animation");
+    if (visitedNodesInOrder.length === 0) {
+    }
     for (let i = 0; i < visitedNodesInOrder.length; i++) {
       const curNode = visitedNodesInOrder[i];
       setTimeout(() => {
@@ -82,6 +84,7 @@ export default class PathfindingVisualizer extends Component {
   }
 
   animateShortestPath(nodesInShortestPath, finishNode, startNode) {
+    console.log("shortest");
     if (nodesInShortestPath.length === 0) {
       //animate Start and Finish Node if no Path was found
       startNode.noFinishFound = true;
@@ -123,8 +126,10 @@ export default class PathfindingVisualizer extends Component {
   mouseDownHandler(row, col) {
     if (!this.state.isStarted) {
       if (this.state.grid[row][col].isStart) {
+        //down on start node
         this.setState({ mouseDownStart: true });
       } else if (this.state.grid[row][col].isFinish) {
+        //down on finish node
         this.setState({ mouseDownFinish: true });
       } else {
         let newGrid = gridToggleWall(this.state.grid, row, col);
@@ -140,8 +145,8 @@ export default class PathfindingVisualizer extends Component {
         if (!newGrid[row][col].isFinish) {
           newGrid[this.state.start.row][this.state.start.col].isStart = false;
           newGrid[row][col].isStart = true;
+          this.setState({ gird: newGrid, start: { row: row, col: col } });
         }
-        this.setState({ gird: newGrid, start: { row: row, col: col } });
       } else if (this.state.mouseDownFinish) {
         //make node finish
         let newGrid = this.state.grid;
@@ -150,8 +155,8 @@ export default class PathfindingVisualizer extends Component {
             this.state.finish.col
           ].isFinish = false;
           newGrid[row][col].isFinish = true;
+          this.setState({ gird: newGrid, finish: { row: row, col: col } });
         }
-        this.setState({ gird: newGrid, finish: { row: row, col: col } });
       } else if (this.state.mouseDownOther) {
         let newGrid = gridToggleWall(this.state.grid, row, col);
         this.setState({ grid: newGrid });
@@ -159,23 +164,23 @@ export default class PathfindingVisualizer extends Component {
     }
   }
   mouseLeaveNodeHandler(row, col) {
-    if (!this.state.isStarted) {
-      // if (this.state.mouseDownStart) {
-      //   //reset start node to old
-      //   let newGrid = this.state.grid;
-      //   if (!newGrid[row][col].isFinish) {
-      //     newGrid[row][col].isStart = false;
-      //   }
-      //   this.setState({ gird: newGrid });
-      // } else if (this.state.mouseDownFinish) {
-      //   //reset finish node to old
-      //   let newGrid = this.state.grid;
-      //   if (!newGrid[row][col].isStart) {
-      //     newGrid[row][col].isFinish = false;
-      //   }
-      //   this.setState({ gird: newGrid });
-      // }
-    }
+    // if (!this.state.isStarted) {
+    //   if (this.state.mouseDownStart) {
+    //     let newGrid = this.state.grid;
+    //     if (newGrid[row][col].isFinish) {
+    //       console.log("leave finish node");
+    //       newGrid[this.state.start.row][this.state.start.col].isStart = false;
+    //     }
+    //     this.setState({ gird: newGrid });
+    //   } else if (this.state.mouseDownFinish) {
+    //     //reset finish node to old
+    //     let newGrid = this.state.grid;
+    //     if (newGrid[row][col].isStart) {
+    //       newGrid[row][col].isFinish = false;
+    //     }
+    //     this.setState({ gird: newGrid });
+    //   }
+    // }
   }
 
   mouseUpHandler() {
@@ -274,7 +279,6 @@ export default class PathfindingVisualizer extends Component {
 
   render() {
     const { grid } = this.state;
-    console.log(this.state.mouseDown);
     return (
       <div onMouseUp={() => this.mouseUpHandler()}>
         <header className="PVHeader">
