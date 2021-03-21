@@ -1,3 +1,7 @@
+:root {
+  --img_bg_start: url("https://i.imgur.com/qFMTg75.png");
+  --img_bg_finish: url("https://i.imgur.com/aXqKezs.png");
+}
 .node {
   color: whitesmoke;
   width: 1.5vw;
@@ -17,6 +21,10 @@
   /* border: solid #527260 1px; */
 }
 .Start {
+  background-image: var(--img_bg_start);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
   background-color: #29c415;
   animation-name: startAnimation;
   animation-duration: 1s;
@@ -38,6 +46,10 @@
   }
 }
 .Finish {
+  background-image: var(--img_bg_finish);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
   background-color: #ae652c;
   animation-name: startAnimation;
   animation-duration: 1s;
@@ -149,7 +161,10 @@
   }
 }
 .Unused {
-  background-color: #344e41e5;
+  background: url("https://i.imgur.com/eDjDFo5.png") #344e41e5;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 /* .Unused {
   animation-name: unusedAnimation;
@@ -197,24 +212,52 @@
   animation-fill-mode: forwards;
   animation-play-state: running;
 }
+.ShortestF {
+  background-image: var(--img_bg_finish);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  animation-name: shortestAnimation;
+  animation-duration: 1.3s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+.ShortestS {
+  background-image: var(--img_bg_start);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  animation-name: shortestAnimation;
+  animation-duration: 1.3s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
 
 @keyframes shortestAnimation {
   0% {
     transform: scale(0.7);
-    background-color: #b07d1e;
+    background-color: #29c415;
     /* border: solid #B07D1E 1px; */
     border-radius: 30%;
   }
 
   50% {
     /* background-color: #C2820C; */
-    background-image: url(./../media/Elena.png);
+    /* background-image: url(https://i.imgur.com/eDjDFo5.png); */
     /* border: solid #C2820C 1px; */
     transform: scale(1.05);
   }
 
   75% {
-    background-color: #f0a00c;
+    background-color: #f0670c;
     /* border: solid #e29911 1px; */
     /* #f3b238 */
   }

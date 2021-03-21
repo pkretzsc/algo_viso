@@ -2,29 +2,27 @@ h1 {
   font-size: calc(0px + 4vmin);
   margin: 0vh;
 }
-.Logo-Container{
+.Logo-Container {
   width: 95vw;
 }
 .App-logo-1 {
   height: 5vh;
   pointer-events: none;
   margin-right: 90px;
-  float:right;
-  
+  float: right;
 }
 .App-logo-2 {
   height: 5vh;
   pointer-events: none;
   margin-right: 90px;
-  float:right;
+  float: right;
   /* rotate: 120deg; */
-  
 }
 .App-logo-3 {
   height: 5vh;
   pointer-events: none;
   margin-right: 90px;
-  float:right;
+  float: right;
   /* rotate: 240deg; */
 }
 
@@ -94,5 +92,15 @@ main {
 .NodeGrid {
   display: flex;
   flex-direction: row;
-  border: solid #5d887275 1px
+  border: solid #5d887275 1px;
+}
+
+.imgTest {
+  height: 5vh;
+  pointer-events: none;
+  margin-right: 90px;
+  float: right;
+  background-image: url("https://i.imgur.com/eDjDFo5.png");
+  background-color: #344e41e5;
+  background-size: cover;
 }

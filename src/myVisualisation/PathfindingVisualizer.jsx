@@ -63,15 +63,19 @@ export default class PathfindingVisualizer extends Component {
 
     if (visitedNodesInOrder.length === 0) {
       //if no nodes were visited, there is no shortest path
-      startNode.noFinishFound = true;
-      finishNode.noFinishFound = true;
+      console.log(nodesInShortestPath, "no visited");
+      if (nodesInShortestPath.length === 2) {
+        this.animateShortestPath(nodesInShortestPath, finishNode, startNode);
+      } else {
+        startNode.noFinishFound = true;
+        finishNode.noFinishFound = true;
 
-      setTimeout(() => {
-        finishNode.noFinishFound = false;
-        startNode.noFinishFound = false;
-        this.setState({ isRunning: false });
-      }, 1000);
-      console.log("visited 0");
+        setTimeout(() => {
+          finishNode.noFinishFound = false;
+          startNode.noFinishFound = false;
+          this.setState({ isRunning: false });
+        }, 1000);
+      }
     } else {
       for (let i = 0; i < visitedNodesInOrder.length; i++) {
         const curNode = visitedNodesInOrder[i];
@@ -111,14 +115,29 @@ export default class PathfindingVisualizer extends Component {
     } else {
       for (let i = 0; i < nodesInShortestPath.length; i++) {
         const curNode = nodesInShortestPath[i];
-        setTimeout(() => {
-          //animate in shortest path in line
-          document.getElementById(`node-${curNode.id}`).className =
-            "node Shortest";
-          if (i === nodesInShortestPath.length - 1) {
+        if (curNode.isStart) {
+          setTimeout(() => {
+            //animate in shortest path in line
+            document.getElementById(`node-${curNode.id}`).className =
+              "node ShortestS";
+          }, 20 * i);
+        } else if (curNode.isFinish) {
+          setTimeout(() => {
+            //animate in shortest path in line
+            document.getElementById(`node-${curNode.id}`).className =
+              "node ShortestF";
             this.setState({ isRunning: false });
-          }
-        }, 20 * i);
+          }, 20 * i);
+        } else {
+          setTimeout(() => {
+            //animate in shortest path in line
+            document.getElementById(`node-${curNode.id}`).className =
+              "node Shortest";
+            if (i === nodesInShortestPath.length - 1) {
+              this.setState({ isRunning: false });
+            }
+          }, 20 * i);
+        }
       }
     }
   }
@@ -156,19 +175,7 @@ export default class PathfindingVisualizer extends Component {
       if (this.state.mouseDownStart) {
         //make node start
         let newGrid = this.state.grid;
-        if (
-          !(
-            this.state.grid[row - 1][col - 1].isFinish ||
-            this.state.grid[row - 1][col].isFinish ||
-            this.state.grid[row - 1][col + 1].isFinish ||
-            this.state.grid[row][col + 1].isFinish ||
-            this.state.grid[row][col].isFinish ||
-            this.state.grid[row][col - 1].isFinish ||
-            this.state.grid[row + 1][col - 1].isFinish ||
-            this.state.grid[row + 1][col].isFinish ||
-            this.state.grid[row + 1][col + 1].isFinish
-          )
-        ) {
+        if (!this.state.grid[row][col].isFinish) {
           newGrid[this.state.start.row][this.state.start.col].isStart = false;
           newGrid[row][col].isStart = true;
           this.setState({ gird: newGrid, start: { row: row, col: col } });
@@ -176,19 +183,7 @@ export default class PathfindingVisualizer extends Component {
       } else if (this.state.mouseDownFinish) {
         //make node finish
         let newGrid = this.state.grid;
-        if (
-          !(
-            this.state.grid[row - 1][col - 1].isStart ||
-            this.state.grid[row - 1][col].isStart ||
-            this.state.grid[row - 1][col + 1].isStart ||
-            this.state.grid[row][col + 1].isStart ||
-            this.state.grid[row][col].isStart ||
-            this.state.grid[row][col - 1].isStart ||
-            this.state.grid[row + 1][col - 1].isStart ||
-            this.state.grid[row + 1][col].isStart ||
-            this.state.grid[row + 1][col + 1].isStart
-          )
-        ) {
+        if (!this.state.grid[row][col].isStart) {
           newGrid[this.state.finish.row][
             this.state.finish.col
           ].isFinish = false;
@@ -254,16 +249,31 @@ export default class PathfindingVisualizer extends Component {
   resetGrid(grid) {
     grid.forEach((curRow) =>
       curRow.forEach((curNode) => {
-        if (!curNode.isStart && !curNode.isFinish && !curNode.isWall) {
+        if (curNode.isStart) {
           document.getElementById(`node-${curNode.id}`).className =
-            "node Unused";
-          curNode.isWall = false;
+            "node Start";
+          curNode.isVisited = false;
+          curNode.isShortest = false;
+          curNode.distance = Infinity;
+          curNode.predecessor = null;
+        } else if (curNode.isFinish) {
+          document.getElementById(`node-${curNode.id}`).className =
+            "node Finish";
+          curNode.isVisited = false;
+          curNode.isShortest = false;
+          curNode.distance = Infinity;
+          curNode.predecessor = null;
+        } else if (curNode.isWall) {
           curNode.isVisited = false;
           curNode.isShortest = false;
           curNode.distance = Infinity;
           curNode.predecessor = null;
         } else {
+          document.getElementById(`node-${curNode.id}`).className =
+            "node Unused";
+          curNode.isWall = false;
           curNode.isVisited = false;
+          curNode.isShortest = false;
           curNode.distance = Infinity;
           curNode.predecessor = null;
         }
@@ -280,7 +290,21 @@ export default class PathfindingVisualizer extends Component {
   resetWalls(grid) {
     grid.forEach((curRow) =>
       curRow.forEach((curNode) => {
-        if (!curNode.isStart && !curNode.isFinish) {
+        if (curNode.isStart) {
+          document.getElementById(`node-${curNode.id}`).className =
+            "node Start";
+          curNode.isVisited = false;
+          curNode.isShortest = false;
+          curNode.distance = Infinity;
+          curNode.predecessor = null;
+        } else if (curNode.isFinish) {
+          document.getElementById(`node-${curNode.id}`).className =
+            "node Finish";
+          curNode.isVisited = false;
+          curNode.isShortest = false;
+          curNode.distance = Infinity;
+          curNode.predecessor = null;
+        } /*if (!curNode.isStart && !curNode.isFinish)*/ else {
           document.getElementById(`node-${curNode.id}`).className =
             "node Unused";
           curNode.isWall = false;
@@ -288,11 +312,13 @@ export default class PathfindingVisualizer extends Component {
           curNode.isShortest = false;
           curNode.distance = Infinity;
           curNode.predecessor = null;
-        } else {
-          curNode.isVisited = false;
-          curNode.distance = Infinity;
-          curNode.predecessor = null;
         }
+        // } else {
+        //   curNode.isVisited = false;
+        //   curNode.isShortest = false;
+        //   curNode.distance = Infinity;
+        //   curNode.predecessor = null;
+        // }
       })
     );
     return grid;
@@ -387,7 +413,12 @@ export default class PathfindingVisualizer extends Component {
             <img src={marlen} className="App-logo-3" alt="logo " />
             <img src={martin} className="App-logo-1" alt="logo " />
             <img src={max} className="App-logo-3" alt="logo " />
-            <img src={paul} className="App-logo-2" alt="logo " />
+            <img
+              src="https://i.imgur.com/eDjDFo5.png"
+              className="App-logo-2"
+              alt="logo "
+            />
+            <div className="imgTest">hello</div>
           </div>
         </main>
       </div>
