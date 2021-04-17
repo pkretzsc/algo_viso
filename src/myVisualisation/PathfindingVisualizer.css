@@ -1,5 +1,5 @@
 h1 {
-  font-size: calc(0px + 4vmin);
+  font-size: calc(2px + 4vmin);
   margin: 0vh;
 }
 .Logo-Container {
@@ -103,4 +103,11 @@ main {
   background-image: url("https://i.imgur.com/eDjDFo5.png");
   background-color: #344e41e5;
   background-size: cover;
+}
+
+.SelectBar {
+  flex-direction: row;
+  background: white;
+  border-radius: 6%;
+  font-size: calc(13px + (20 - 13) * ((100vw - 320px) / (1600 - 320)));
 }

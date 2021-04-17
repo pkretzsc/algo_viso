@@ -1,7 +1,7 @@
 import { NUMBER_ROWS } from "./../PathfindingVisualizer";
 import { NUMBER_COLLUMS } from "./../PathfindingVisualizer";
 
-export function dijkstras(grid, startNode, finishNode) {
+export function dijkstras(grid, startNode, finishNode, checkedDia) {
   startNode.distance = 0;
   let heap = [];
   let visitedNodesInOrder = [];
@@ -11,7 +11,7 @@ export function dijkstras(grid, startNode, finishNode) {
     // console.log('while loop');
     let curNode = heap.shift();
     // curNode.isVisited = true;
-    addNeighbors(curNode, heap, grid);
+    addNeighbors(curNode, heap, grid, checkedDia);
     // console.log(heap.length, 'heap length');
     visitedNodesInOrder.push(curNode);
     if (curNode.id === finishNode.id) {
@@ -25,9 +25,16 @@ export function dijkstras(grid, startNode, finishNode) {
   return visitedNodesInOrder;
 }
 //get the untouched Neighbors of curNode and init them and push them into the heap
-function addNeighbors(curNode, heap, grid) {
+function addNeighbors(curNode, heap, grid, checkedDia) {
   let { row, col } = curNode;
-  let untouchedNeighbors = newNeighbors(row, col, grid);
+
+  var untouchedNeighbors = (() => {
+    if (checkedDia) {
+      return newNeighborsDia(row, col, grid);
+    } else {
+      return newNeighborsLin(row, col, grid);
+    }
+  })();
   // console.log(untouchedNeighbors,'untouchedN')
   // for(let neighbor in untouchedNeighbors){
   //     neighbor.distance = curNode.distance + 1;
@@ -41,12 +48,31 @@ function addNeighbors(curNode, heap, grid) {
   });
 }
 //return all neighbors that didnt got a distance yet, therefor being untouched
-function newNeighbors(row, col, grid) {
+function newNeighborsLin(row, col, grid) {
   let neighbors = [];
   if (row > 0) neighbors.push(grid[row - 1][col]);
   if (row < NUMBER_ROWS - 1) neighbors.push(grid[row + 1][col]);
   if (col > 0) neighbors.push(grid[row][col - 1]);
   if (col < NUMBER_COLLUMS - 1) neighbors.push(grid[row][col + 1]);
+  // console.log(neighbors,'newNeighbors');
+  return neighbors.filter(
+    (neighbor) =>
+      neighbor.distance === Infinity && !(neighbor.isWall && !neighbor.isFinish)
+  );
+}
+
+function newNeighborsDia(row, col, grid) {
+  let neighbors = [];
+  if (row > 0) neighbors.push(grid[row - 1][col]);
+  if (row > 0 && col > 0) neighbors.push(grid[row - 1][col - 1]);
+  if (row < NUMBER_ROWS - 1) neighbors.push(grid[row + 1][col]);
+  if (row > 0 && col < NUMBER_COLLUMS - 1)
+    neighbors.push(grid[row - 1][col + 1]);
+  if (col > 0) neighbors.push(grid[row][col - 1]);
+  if (row < NUMBER_ROWS - 1 && col > 0) neighbors.push(grid[row + 1][col - 1]);
+  if (col < NUMBER_COLLUMS - 1) neighbors.push(grid[row][col + 1]);
+  if (row < NUMBER_ROWS - 1 && col < NUMBER_COLLUMS - 1)
+    neighbors.push(grid[row + 1][col + 1]);
   // console.log(neighbors,'newNeighbors');
   return neighbors.filter(
     (neighbor) =>

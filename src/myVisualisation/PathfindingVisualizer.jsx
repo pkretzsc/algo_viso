@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 import Node from "./Node/Node";
 import "./PathfindingVisualizer.css";
 import elena from "./media/Elena.png";
@@ -10,12 +12,16 @@ import lilli from "./media/Lilli.png";
 import marlen from "./media/Marlen.png";
 import martin from "./media/Martin.png";
 import max from "./media/Max.png";
-import paul from "./media/Paul.png";
+// import paul from "./media/Paul.png";
 
 import { dijkstras, getNodesInShortestPathOrder } from "./algorithms/dijkstras";
 import { nanoid } from "nanoid";
+import { optionsAlgo, selectAlgoStyle } from "./data/select.js";
+import Select from "react-select";
+import { aStarLin } from "./algorithms/aStar";
 export const NUMBER_ROWS = 60;
 export const NUMBER_COLLUMS = 25;
+
 export default class PathfindingVisualizer extends Component {
   constructor(props) {
     super(props);
@@ -34,6 +40,8 @@ export default class PathfindingVisualizer extends Component {
         row: 34,
         col: 14,
       },
+      selectAlgo: optionsAlgo[0],
+      checkedDia: false,
     };
   }
   componentDidMount() {
@@ -45,10 +53,23 @@ export default class PathfindingVisualizer extends Component {
       grid,
       start: { row: startRow, col: startCol },
       finish: { row: finishRow, col: finishCol },
+      checkedDia,
     } = this.state;
     const startNode = grid[startRow][startCol];
     const finishNode = grid[finishRow][finishCol];
-    const visitedNodesInOrder = dijkstras(grid, startNode, finishNode);
+    console.log(checkedDia);
+    const visitedNodesInOrder = (() => {
+      switch (this.state.selectAlgo.value) {
+        case "dijkstra":
+          return dijkstras(grid, startNode, finishNode, checkedDia);
+        case "aStar":
+          return aStarLin(grid, startNode, finishNode, checkedDia);
+        default:
+          console.log("default");
+          break;
+      }
+    })();
+    // const visitedNodesInOrder = dijkstras(grid, startNode, finishNode);
     const nodesInShortestPath = getNodesInShortestPathOrder(finishNode);
     this.animateAlgo(
       visitedNodesInOrder,
@@ -323,6 +344,16 @@ export default class PathfindingVisualizer extends Component {
     );
     return grid;
   }
+
+  selectChange = (selectedOption) => {
+    this.setState({ selectAlgo: selectedOption });
+    console.log(selectedOption);
+  };
+
+  handleCheck = (event) => {
+    this.setState({ checkedDia: event.target.checked });
+    console.log(event.target.checked);
+  };
   //think about passing in grid and rendering it again
   // resetWalls(grid) {
   //   grid.forEach((curRow) =>
@@ -347,6 +378,28 @@ export default class PathfindingVisualizer extends Component {
       <div onMouseUp={() => this.mouseUpHandler()}>
         <header className="PVHeader">
           <h1>Pathfinding Visualiser</h1>
+          <div className="SelectBar">
+            <Select
+              // defaultValue={optionsF[1]}
+              options={optionsAlgo}
+              defaultValue={optionsAlgo[0]}
+              styles={selectAlgoStyle}
+              onChange={this.selectChange}
+              value={this.state.selectAlgo}
+              // formatGroupLabel={formatGroupLabel}
+            />
+          </div>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={this.state.checkedDia}
+                onChange={this.handleCheck}
+                name="checkDia"
+                color="primary"
+              />
+            }
+            label="Enable Diagonal Paths"
+          />
           <div className="ButtonBar">
             <button
               disabled={this.state.isStarted}
